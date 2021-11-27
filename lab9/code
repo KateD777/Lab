@@ -1,0 +1,71 @@
+#include <SFML/Graphics.hpp>
+#include <iostream>
+#include <chrono>
+#include <thread>
+
+using namespace std::chrono_literals;
+
+int main()
+{ /*Вариант 5.
+Создайте 3 произвольных фигуры разной формы, цвета и размера. 
+Сделайте так, чтобы они из своих исходных позиций перемещались вправо. 
+При достижении левой части экрана фигуры должны остановиться.*/
+    sf::RenderWindow window(sf::VideoMode(700, 400), "SFML works!");
+
+    // Создаем круг
+    sf::CircleShape shape(60.f);
+    shape.setFillColor(sf::Color::White);
+    int shape_x = 0;
+    shape.setPosition(shape_x, 0);
+
+    // Создаем треугольник
+    sf::CircleShape triangle(65.f, 3);
+    int triangle_x = 0, triangle_y = 0;
+    triangle.setPosition(0, 125); 
+    triangle.setFillColor(sf::Color::Blue); 
+
+    // Создаем квадрат
+    sf::CircleShape square(60.f, 4);
+    int square_x = 0, square_y = 0;
+    square.setPosition(0, 250);
+    square.setFillColor(sf::Color::Red);
+
+
+
+    while (window.isOpen())
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+
+        if (shape_x < 580)
+        {
+            shape_x++;
+            shape.setPosition(shape_x, 0);
+
+            square_x++;
+            square.setPosition(square_x, 250);
+
+            triangle_x++;
+            triangle.setPosition(triangle_x, 125);
+        }
+       // else
+        //{
+            //std::this_thread::sleep_for(std::chrono::seconds(1));
+          //  return 1;
+        //}
+        
+        window.clear();
+        window.draw(shape);
+        window.draw(triangle);
+        window.draw(square);
+        window.display();
+
+        //std::this_thread::sleep_for(10ms);
+    }
+
+    return 0;
+}

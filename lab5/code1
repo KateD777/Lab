@@ -1,0 +1,91 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#define ARRAY_SIZE 100
+
+
+int main()
+{
+    /*Дан файл, содержащий русский текст, размер текста не превышает 10 К байт.
+Найти в тексте N (N ≤ 100) самых длинных слов, не содержащих одинаковых БУКВ.
+Записать найденные слова в текстовый файл в порядке убывания длины. 
+Все найденные слова должны быть разными.*/
+    std::ifstream inf("input.txt");
+    std::ofstream outf("output.txt");
+    char text_change[1000];
+    std::string word, line;
+    int N, length, max_len;
+    bool proverka;
+    if (!inf) 
+    {
+        exit(1);
+    }
+    inf >> N;
+    while (!inf.eof()) 
+    {
+        inf >> word;      
+        length = word.length();
+        int i = 0;
+        proverka = false;
+
+        while (inf.getline(text_change, sizeof(text_change)))
+        {
+            for (int i = 0; i < sizeof(text_change); i++)
+            {
+                if ((text_change[i] == ',') || (text_change[i] == '.') || (text_change[i] == '!') || (text_change[i] == '&')
+                    || (text_change[i] == '?'))
+                {
+                    text_change[i] = ' ';
+                }
+            }
+            line = text_change;
+        }
+
+        while (i < length) 
+        {
+            int j = i + 1;
+            while (j < length) 
+            {
+                if (word[i] == word[j]) 
+                {
+                    i = j = length;
+                    proverka = true;
+                }
+                j += 1;
+            }
+            i += 1;
+        }
+        if (!proverka)
+            if (line.find(word) == -1)         
+                line += word + " ";
+    }
+    inf.close();
+    std::string Last_Line;
+    int lspace = 0;
+    int maxlen, curlen, maxbegin = 0;
+    for (int i = 0; i < N; i++) 
+    {
+        lspace = 0, maxbegin = 0, maxlen = curlen = 0;
+        length = line.length();
+        for (int j = 0; j < length; j++) 
+        {
+            if (line[j] == ' ')          
+            {
+                curlen = j - lspace;
+                if (curlen > maxlen)     
+                {
+                    maxlen = curlen;
+                    maxbegin = lspace;
+                }
+                lspace = j + 1;
+            }
+        }
+        Last_Line += line.substr(maxbegin, maxlen) + " ";       
+        if (length != maxlen + 1)
+            line.replace(maxbegin, length - maxbegin, line.substr(maxbegin + maxlen + 1));
+
+    }
+    outf << Last_Line;
+    outf.close();
+    return 0;
+}

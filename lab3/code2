@@ -1,0 +1,21 @@
+#include <iostream>
+#include <cmath>
+
+double y(double x) {
+	double s = 0; int n = 0;
+	do {
+		s += (cos(n * 0.785) / n + 1) * pow(x, n);
+		n++;
+	} while (n < 21);
+	return s;
+}
+
+int main() {
+	double a = 0.1;
+	double b = 1.2;
+	double h = 0.1;
+	for (double x = a; x <= b; x += h)
+		std::cout << x << " " << y(x) << std::endl;
+	std::cin.get();
+	return 0;
+}

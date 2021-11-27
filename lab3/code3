@@ -1,0 +1,18 @@
+
+#include <iostream>
+
+int main()
+{ /*Вариант 5. Дано натуральное число n. Найти сумму его цифр.*/
+    setlocale(LC_ALL, "Rus");
+    int n;
+    int summa = 0;
+    std::cout << "Введите число n\n";
+    std::cin >> n;
+    while (n > 0) {
+        int c = n % 10;
+        summa = summa + c;
+        n = n / 10;     
+    }
+    std::cout << "Сумма цифр равна " << summa;
+    return 0;
+}

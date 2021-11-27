@@ -1,0 +1,135 @@
+#include <iostream>
+#include <fstream>
+#include <cmath>
+#define N 10000
+#define M 100
+#define L 100
+int main()
+
+{/*Вариант-5.
+1.	Дана последовательность натуральных чисел {aj}j=1...n (n<=10000).
+Если в последовательности нет чисел с суммой цифр, равной 19, упорядочить последовательность по возрастанию.*/
+
+    setlocale(LC_ALL, "Rus");
+    int n;
+    int mas[N], sum[N];
+    std::cout << "Введите общее число элементов массива и сами элементы\n";
+    std::cin >> n;
+
+    for (int i = 0; i < n; i++)
+    {
+        std::cin >> mas[i];
+
+        sum[i] = 0;
+        int x = mas[i];
+
+        while (x > 0)
+        {
+            sum[i] +=  sqrt(x) % 10;
+            x /= 10;
+        }
+
+        if (sum[i] != 19) //флаг+
+        {
+            for (int i = 1; i < n; ++i)
+                for (int j = i + 1; j < n; ++j)
+                    if (mas[i] > mas[j])
+                    {
+                        int prom = mas[j];
+                        mas[j] = mas[j];
+                        mas[j] = prom;
+                    }
+        }
+        else
+        {
+            std::cout << "Есть число сумма цифр которого равна 19";
+            return 0;
+        }
+
+    }
+    for (int i = 0; i < n; ++i)
+        std::cout << mas[i] << ' ';
+
+
+        /*2.	Ввести последовательность натуральных чисел {Aj}j=1...n (n<=1000).
+        Упорядочить последовательность по возрастанию суммы цифр числа,
+        числа с одинаковыми суммами цифр дополнительно упорядочить по возрастанию первой цифры числа,
+        числа с одинаковыми суммами цифр и одинаковыми первыми цифрами дополнительно упорядочить по возрастанию самого числа.*/
+    int mass[N], perv[N], summa[N];
+    int n0;
+    std::cout << "\nВведите общее число элементов массива и сами элементы\n";
+    std::cin >> n0;
+    for (int i = 0; i < n0; i++)
+    {
+        std::cin >> mass[i];
+
+        summa[i] = 0;
+        int u = mass[i];
+        while (u != 0)
+        {
+
+            int x = sqrt(perv[i]) % 10;
+            perv[i] = perv[i] / 10;
+        }
+
+        while (u > 0)
+        {
+            summa[i] += u % 10;
+            u /= 10;
+        }
+    }
+
+    for (int i = 0; i < n - 1; i++)
+        for (int j = i + 1; j < n; j++)
+        {
+            if (summa[i] > summa[j] ||
+                (summa[i] == summa[j] && perv[i] > perv[j]) ||
+                (summa[i] == summa[j] && perv[i] == perv[j] && mass[i] > mass[j]))
+            {
+                std::swap(mass[i], mass[j]);
+                std::swap(perv[i], perv[j]);
+                std::swap(summa[i], summa[j]);
+            }
+        }
+    for (int i = 0; i < n; i++)
+
+    {
+        std::cout << mass[i] << "\t";
+        std::cout << perv[i] << "\t";
+        std::cout << summa[i] << "\t";
+    }
+
+
+    /*3.	Дана целочисленная матрица {Aij}i=1..n,j=1..m (n,m<=100).
+    Найти строку с наибольшей по абсолютной величине суммой элементов и заменить все элементы этой строки числом 9999.*/
+    std::ifstream in("input.txt");
+    std::ofstream out("output.txt");
+    int matrix[L][M];
+    int l, m;
+    in >> l >> m;
+    for (int i = 0; i < l; i++)
+        for (int j = 0; j < m; j++)
+            in >> matrix[i][j];
+
+    
+
+    int maxi = matrix[0][0];
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < m; j++)
+            if (maxi < matrix[i][j])
+                maxi = matrix[i][j];
+            else if (matrix[i][j] != maxi)
+                matrix[i][j] = 9999;
+
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < l; j++)
+        {
+            out << matrix[i][j] << " ";
+        }
+        out << std::endl;       
+    }
+
+    out << "Максимальный элемент матрицы равен " << maxi;
+    return 0;
+}

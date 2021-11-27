@@ -1,0 +1,39 @@
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <Windows.h>
+#include <cstring>
+
+int main()
+{   setlocale(LC_ALL, "Rus");
+    SetConsoleCP(1251);
+ /*Вы можете использовать русские или латинские буквы, как удобнее.
+Задачу 1 решите через массив char.
+Задачу 2 можно решить как через массив char, так и через std::string.
+    Вариант-5.
+1.	Дана строка длиной не более 100 символов. 
+Найти в ней наиболее часто встречающуюся букву. Регистр не учитывать.*/
+std::ifstream in("input.txt");
+int symbols[256]; 
+int maxy = 0;
+std::cout << "Убедитесь, что в документе input введен необходимый вам текст\n";
+for (int i = 0; i < 256; i++)
+   symbols[i] = 0;
+unsigned char letter;
+while (in >> letter)
+{
+    if (letter >= 65 && letter <= 90)
+        letter += 32;
+    symbols[letter]++;
+    if (symbols[letter] > maxy)
+    {
+        char bukva = (int)letter;
+        maxy = symbols[letter];
+    }
+}
+std::cout << maxy << ' ' << letter << std::endl;
+in.close();
+return 0; 
+}
+

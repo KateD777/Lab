@@ -1,0 +1,138 @@
+#include <iostream>
+#include <iostream>
+#include <fstream>
+#define M 100
+#define L 100
+
+int matrix[L][M];
+int l, m, flag1=0, flag2 = 0;
+int letter = 0;
+int letter1 = 0;
+int Sum_kvad;
+int minimum = 1000;
+int index_i = 0; 
+int index_j = 0;
+
+/*Вариант - 5
+Дана целочисленная матрица {Aij}i=1...n;j=1..n , n<=100. 
+Если все диагональные элементы матрицы положительны и содержат цифры 3 или 5, 
+заменить минимальные элементы столбцов на суммы квадратов элементов 
+соответствующих столбцов*/
+void Read()                    //функция чтения
+{
+	std::ifstream in("input.txt");
+	in >> l >> m;
+	for (int i = 0; i < l; i++)
+		for (int j = 0; j < m; j++)
+			in >> matrix[i][j];
+	in.close();
+}
+
+void diagonal1()
+{
+	for (int i = 0; i < l; i++)		
+	{
+		for (int j = 0; j < m; j++)
+		{
+			if ((i == j) && (matrix[i][j] > 0))
+			{   int N = matrix[i][j];
+				do
+				{
+					letter = N % 10;
+
+					if (letter == 3 || letter == 5)
+					{
+						flag1 += 1;  
+						break;				
+					}
+					N = N / 10;
+				} 
+				while (N > 0);
+				break;
+			}
+		}
+	}
+}
+
+void diagonal2()
+{
+	if ((flag1 == l) || (flag1 == m))         //если в первой диагонали все удов-ют услов то проверяем другую диагональ
+	{
+		for (int i = 0; i < l; i++)
+		{
+			for (int j = 0; j < m; j++)
+			{
+				if (matrix[i][m - i - 1] > 0)
+				{
+					int N = matrix[i][m - i - 1];
+					do
+					{
+						letter = N % 10;
+
+						if (letter == 3 || letter == 5)
+						{
+							flag2 += 1;
+							break;
+						}
+						N = N / 10;
+					} while (N > 0);
+					break;
+				}
+			}
+		}
+	}
+}
+
+void proverka()                            //функция проверки минимума в столбце
+{
+	if (flag1 == flag2)
+	{
+			for (int j = 0; j < m; j++)
+			{
+				Sum_kvad = 0;			
+				minimum = 1000;
+
+				for (int i = 0; i < l; i++)
+				{
+					if (matrix[i][j] < minimum)
+					{
+						minimum = matrix[i][j];
+						index_i = i; 
+						index_j = j;
+					}
+					Sum_kvad += (matrix[i][j] * matrix[i][j]);
+				}
+				Sum_kvad = Sum_kvad - (minimum * minimum);
+				matrix[index_i][index_j] = Sum_kvad;
+			}
+	}
+}
+
+void Matrix()                 //функция вывода
+{
+	std::cout << "\n";
+	for (int t = 0; t < l; t++)
+	{
+		for (int j = 0; j < m; j++)
+		{
+			std::cout << matrix[t][j] << " ";
+		}
+			std::cout << "\n";
+		
+	}
+}
+
+int main()
+{
+	Read(); //функция чтения
+
+	diagonal1();
+
+	diagonal2();
+
+	proverka(); //функция проверки по условиям
+
+	Matrix(); //Функция вывода
+
+	return 0;
+}
